@@ -1,0 +1,16 @@
+<div class="form-field">
+
+  <label *ngIf="label">
+    {{ label }}
+  </label>
+
+  <ng-content></ng-content>
+
+  <!-- Centralized validation UI -->
+  <app-form-error
+    *ngIf="control"
+    [control]="control">
+  </app-form-error>
+
+</div>
+

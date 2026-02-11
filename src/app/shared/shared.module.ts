@@ -12,6 +12,8 @@ import { DropdownModule } from 'primeng/dropdown';
 import { ButtonModule } from 'primeng/button';
 import { TableComponent } from './components/ui/table/table.component';
 import { TableModule } from 'primeng/table';
+import { FormFieldComponent } from './components/form-field/form-field.component';
+import { FormErrorComponent } from './components/form-error/form-error.component';
 @NgModule({
   declarations: [
     NotFoundComponent,
@@ -19,7 +21,9 @@ import { TableModule } from 'primeng/table';
     ButtonComponent,
     TextInputComponent,
     NumberInputComponent,
-    TableComponent
+    TableComponent,
+    FormFieldComponent,
+    FormErrorComponent
   ],
   imports: [
     CommonModule,
@@ -37,7 +41,9 @@ import { TableModule } from 'primeng/table';
     ButtonComponent,
     TextInputComponent,
     NumberInputComponent,
-    TableComponent
+    TableComponent,
+    FormFieldComponent,
+    FormErrorComponent
   ]
 })
 export class SharedModule { }
