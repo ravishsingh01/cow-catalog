@@ -1,0 +1,13 @@
+<p-inputNumber
+  [ngModel]="value"
+  [placeholder]="placeholder"
+  [min]="min"
+  [max]="max"
+  [useGrouping]="useGrouping"
+  [minFractionDigits]="allowDecimal ? 1 : 0"
+  [maxFractionDigits]="allowDecimal ? maxDecimalPlaces : 0"
+  [disabled]="disabled"
+  (onInput)="handlePrimeInput($event)"
+  (onBlur)="handleBlur()"
+  inputStyleClass="w-full">
+</p-inputNumber>
