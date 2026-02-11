@@ -1,14 +1,62 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-regular);
+}
+
 :root {
   /* Colors */
-  --color-error: #d32f2f;
-  --color-text-primary: #212121;
-
+  --telus-white-lilac: #f2eff4;
+  --telus-dark-purple: #3f2a54;
+  --telus-purple: #4b286d;
+  --telus-eminence-purple: #613889;
+  --telus-deluge-purple: #7c53a5;
+  --telus-dark-fern-green: #163e06;
+  --telus-san-felix-green: #1f5c09;
+  --telus-accessible-green: #2b8000;
+  --telus-green: #66cc00;
+  --telus-yellow-green: #bfe797;
+  --telus-tusk-green: #e3f6d1;
+  --telus-panache-green: #f4f9f2;
+  --telus-thunder-green: #2c2e30;
+  --telus-charcoal-grey: #414547;
+  --telus-shuttle-grey: #676e73;
+  --telus-cloud-grey: #b2b9bf;
+  --telus-mystic-grey: #e3e6e8;
+  --telus-athens-grey: #f4f4f7;
+  --telus-alabaster-grey: #fafafa;
+  --telus-dark-red: #c12335;
+  --telus-red: #e12339;
+  --telus-light-red: #fff6f8;
+  --telus-dark-amber: #b4872c;
+  --telus-amber: #faca69;
+  --telus-light-amber: #fff9ee;
   /* Typography */
+  --font-family-base: 'Helvetica', 'Roboto', sans-serif;
   --font-size-sm: 12px;
   --font-size-md: 14px;
+  --font-size-lg: 16px;
+
+  // Font weights
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 600;
 
   /* Spacing */
   --spacing-xs: 4px;
   --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+
+  /* ---------- Layout Contracts ---------- */
+  --header-height: 56px;
 }
 
