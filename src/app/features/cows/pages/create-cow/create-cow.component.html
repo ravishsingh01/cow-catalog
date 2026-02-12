@@ -1,7 +1,7 @@
 <div class="create-cow-page">
   <app-page-header title="Create Cow" [showBack]="true" fallbackUrl="/cows"></app-page-header>
 
-  <form [formGroup]="form" (ngSubmit)="submit()">
+  <form [formGroup]="form" #formDirective="ngForm" (ngSubmit)="submit()">
 
     <app-form-field label="Ear Tag" controlName="id">
       <app-text-input
@@ -10,7 +10,7 @@
       </app-text-input>
     </app-form-field>
 
-    <app-form-field label="Sex" controlName="sex">
+    <app-form-field label="Gender" controlName="sex">
       <app-dropdown
         formControlName="sex"
         [options]="[
@@ -19,7 +19,7 @@
         ]"
         optionLabel="label"
         optionValue="value"
-        placeholder="Select sex">
+        placeholder="Select gender">
       </app-dropdown>
     </app-form-field>
 
@@ -54,19 +54,33 @@
       </app-number-input>
     </app-form-field>
 
-    <div class="actions">
+  <div class="actions">
+    <div class="actions-left">
       <app-button
         label="Cancel"
-        [text]="true"
+        severity="secondary"
+        [outlined]="true"
         (clicked)="cancel()">
+      </app-button>
+    </div>
+
+    <div class="actions-right">
+      <app-button
+        label="Save & Add Another"
+        severity="secondary"
+        type="submit"
+        (clicked)="submitAction = 'SAVE_AND_ADD'">
       </app-button>
 
       <app-button
         label="Save"
         severity="primary"
-        type="submit">
+        type="submit"
+        (clicked)="submitAction = 'SAVE'">
       </app-button>
     </div>
+  </div>
+
 
   </form>
 </div>

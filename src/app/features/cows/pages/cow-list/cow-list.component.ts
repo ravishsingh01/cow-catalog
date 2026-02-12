@@ -11,10 +11,9 @@ import {
 @Component({
   selector: 'app-cow-list',
   templateUrl: './cow-list.component.html',
-  styleUrls: ['./cow-list.component.scss']
+  styleUrls: ['./cow-list.component.scss'],
 })
 export class CowListComponent implements OnInit, OnDestroy {
-
   cows$!: Observable<Cow[]>;
   private destroy$ = new Subject<void>();
 
@@ -30,62 +29,64 @@ export class CowListComponent implements OnInit, OnDestroy {
   penOptions = COW_PEN_OPTIONS;
   columns = [
     { field: 'id', header: 'Ear Tag' },
-    { field: 'sex', header: 'Sex' },
+    { field: 'sex', header: 'Gender' },
     { field: 'pen', header: 'Pen' },
     { field: 'status', header: 'Status' },
-    { field: 'lastEventDate', header: 'Last Event' }
+    { field: 'lastEventDate', header: 'Last Event' },
   ];
 
   constructor(
     private cowService: CowService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
     this.cows$ = this.route.queryParamMap.pipe(
       debounceTime(150),
-      map(params => this.deriveStateFromParams(params)),
+      map((params) => this.deriveStateFromParams(params)),
       distinctUntilChanged((a, b) => this.areStatesEqual(a, b)),
-      tap(state => {
+      tap((state) => {
         this.searchInput = state.filters.search ?? null;
         this.statusInput = state.filters.status ?? null;
         this.penInput = state.filters.pen ?? null;
         this.page = state.page;
         this.rows = state.rows;
       }),
-      switchMap(state => {
+      switchMap((state) => {
         this.loading = true;
 
-        return this.cowService
-          .getPagedCows(state.page, state.rows, state.filters)
-          .pipe(
-            tap({
-              next: result => {
-                this.totalRecords = result.total;
-                this.loading = false;
-              },
-              error: err => {
-                console.error('Failed to load cows', err);
-                this.totalRecords = 0;
-                this.loading = false;
-              }
-            }),
-            catchError(() => of({ data: [], total: 0 }))
-          );
+        return this.cowService.getPagedCows(state.page, state.rows, state.filters).pipe(
+          tap({
+            next: (result) => {
+              this.totalRecords = result.total;
+              this.loading = false;
+            },
+            error: (err) => {
+              console.error('Failed to load cows', err);
+              this.totalRecords = 0;
+              this.loading = false;
+            },
+          }),
+          catchError(() => of({ data: [], total: 0 })),
+        );
       }),
-      map(result => result.data),
-      takeUntil(this.destroy$)
+      map((result) => result.data),
+      takeUntil(this.destroy$),
     );
   }
 
-  private deriveStateFromParams(params: ParamMap): { page: number; rows: number; filters: CowFilters } {
+  private deriveStateFromParams(params: ParamMap): {
+    page: number;
+    rows: number;
+    filters: CowFilters;
+  } {
     const page = +(params.get('page') ?? 0);
     const rows = +(params.get('rows') ?? 10);
     const filters: CowFilters = {
       search: this.normalize(params.get('search')),
       status: this.normalize(params.get('status')) as Cow['status'] | null,
-      pen: this.normalize(params.get('pen'))
+      pen: this.normalize(params.get('pen')),
     };
     return { page, rows, filters };
   }
@@ -105,9 +106,9 @@ export class CowListComponent implements OnInit, OnDestroy {
       relativeTo: this.route,
       queryParams: {
         search: value || null,
-        page: null
+        page: null,
       },
-      queryParamsHandling: 'merge'
+      queryParamsHandling: 'merge',
     });
   }
 
@@ -116,9 +117,9 @@ export class CowListComponent implements OnInit, OnDestroy {
       relativeTo: this.route,
       queryParams: {
         status: status || null,
-        page: null
+        page: null,
       },
-      queryParamsHandling: 'merge'
+      queryParamsHandling: 'merge',
     });
   }
 
@@ -127,9 +128,9 @@ export class CowListComponent implements OnInit, OnDestroy {
       relativeTo: this.route,
       queryParams: {
         pen: pen || null,
-        page: null
+        page: null,
       },
-      queryParamsHandling: 'merge'
+      queryParamsHandling: 'merge',
     });
   }
 
@@ -138,22 +139,20 @@ export class CowListComponent implements OnInit, OnDestroy {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
-        page: isRowsChanged ? null : (event.page > 0 ? event.page : null),
-        rows: event.rows !== 10 ? event.rows : null
+        page: isRowsChanged ? null : event.page > 0 ? event.page : null,
+        rows: event.rows !== 10 ? event.rows : null,
       },
-      queryParamsHandling: 'merge'
+      queryParamsHandling: 'merge',
     });
   }
 
   onAddCow(): void {
     this.router.navigate(['/cows/create'], {
       queryParams: {
-        returnUrl: this.router.url
-      }
+        returnUrl: this.router.url,
+      },
     });
   }
-
-
 
   rowClick(cow: Cow): void {
     this.router.navigate(['/cows', cow.id]);

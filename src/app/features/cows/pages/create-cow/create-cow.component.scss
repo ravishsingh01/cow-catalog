@@ -3,8 +3,6 @@
   flex-direction: column;
   align-items: center; 
   padding: 0 var(--spacing-md, 16px);
-  background-color: var(--surface-ground);
-
   app-page-header {
     width: 100%;
     max-width: 500px; 
@@ -27,9 +25,14 @@
   }
 
   .actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: var(--spacing-sm, 8px);
-    margin-top: var(--spacing-lg, 24px);
-  }
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--spacing-lg, 24px);
+}
+
+.actions-right {
+  display: flex;
+  gap: var(--spacing-sm, 8px);
+}
 }

@@ -7,5 +7,6 @@
   [disabled]="disabled"
   [ngModel]="value"
   [style]="{'width':'100%'}"
-  (onChange)="onValueChange($event.value)">
+  (onChange)="onValueChange($event.value)"
+  (onClear)="onValueChange(null)">
 </p-dropdown>
