@@ -38,6 +38,7 @@ export class TableComponent<T = unknown> {
   @Input() rows = 10;
   @Input() rowsPerPageOptions: number[] = [5, 10, 20, 50];
   @Input() totalRecords = 0;
+   @Input() first = 0;
   @Input() lazy = false;
   @Output() rowClick = new EventEmitter<T>();
 

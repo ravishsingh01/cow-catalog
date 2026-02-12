@@ -1,7 +1,9 @@
 import {
   Component,
+  EventEmitter,
   forwardRef,
-  Input
+  Input,
+  Output
 } from '@angular/core';
 import {
   ControlValueAccessor,
@@ -24,8 +26,8 @@ export class TextInputComponent implements ControlValueAccessor {
 
   @Input() placeholder: string = '';
   @Input() type: string = 'text';
-
-  value: string | null = null;
+  @Input() value: string | null = null;
+  @Output() valueChange = new EventEmitter<string>();
   disabled = false;
 
   private onChange: (value: string | null) => void = () => {};
@@ -51,6 +53,7 @@ export class TextInputComponent implements ControlValueAccessor {
     const input = event.target as HTMLInputElement;
     this.value = input.value;
     this.onChange(this.value);
+    this.valueChange.emit(this.value);
   }
 
   handleBlur(): void {

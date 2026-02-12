@@ -1,10 +1,18 @@
-<h3>Cow List</h3>
+<app-page-header title="Cow List">
+  <app-text-input
+    placeholder="Search ear tag"
+    [value]="filters.search ?? ''"
+    (valueChange)="onSearch($event)">
+  </app-text-input>
+
+</app-page-header>
 
 <app-table
   [value]="(cows$ | async) ?? []"
   [columns]="columns"
   [rowClickable]="true"
   [rows]="rows"
+  [first]="page * rows" 
   [totalRecords]="totalRecords"
   [loading]="loading"
   [lazy]="true"

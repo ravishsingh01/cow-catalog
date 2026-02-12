@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 import { Cow } from '../models/cow.model';
 import { generateCowData } from '../data/cows.data';
+import { CowFilters } from '../models/cow-filters.model';
 @Injectable()
 export class CowService {
 
@@ -20,21 +21,43 @@ export class CowService {
     return seed;
   }
 
-  getPagedCows(page: number, rows: number): Observable<{
-    data: Cow[];
-    total: number;
-  }> {
+  getPagedCows(
+    page: number,
+    rows: number,
+    filters: CowFilters
+  ): Observable<{ data: Cow[]; total: number }> {
+
     return this.cows$.pipe(
       map(cows => {
+        let filtered = [...cows];
+
+        if (filters.search) {
+          filtered = filtered.filter(c =>
+            c.id.toString().includes(filters.search!)
+          );
+        }
+
+        if (filters.status) {
+          filtered = filtered.filter(c =>
+            c.status === filters.status
+          );
+        }
+
+        if (filters.pen) {
+          filtered = filtered.filter(c =>
+            c.pen === filters.pen
+          );
+        }
+
+        const total = filtered.length;
         const start = page * rows;
-        console.log(`Fetching cows for page ${page}, rows ${rows} (start index: ${start}) - Total cows: ${cows.length}`);
-        return {
-          data: cows.slice(start, start + rows),
-          total: cows.length
-        };
+        const data = filtered.slice(start, start + rows);
+
+        return { data, total };
       })
     );
   }
+
 
 
   getCowById(id: string): Cow | undefined {
