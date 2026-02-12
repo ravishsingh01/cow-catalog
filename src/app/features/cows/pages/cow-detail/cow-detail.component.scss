@@ -1,0 +1,91 @@
+.cow-detail-page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+}
+
+/* Cards */
+.summary-card,
+.metrics-card,
+.timeline-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 16px;
+}
+
+/* Summary grid */
+.summary-card {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+}
+
+.summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Metrics */
+.metrics-card {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Labels & values */
+.label {
+  font-size: 12px;
+  color: #6b7280; /* muted gray */
+}
+
+.value {
+  font-size: 14px;
+  font-weight: 500;
+  color: #111827;
+}
+
+/* Timeline */
+.timeline-card h3 {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.timeline {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.timeline li {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-left: 2px solid #e5e7eb;
+  padding-left: 12px;
+  margin-left: 4px;
+}
+
+.timeline li:not(:last-child) {
+  margin-bottom: 8px;
+}
+
+.timeline .date {
+  font-size: 12px;
+  color: #6b7280;
+  min-width: 90px;
+}
+
+.timeline .event {
+  font-size: 14px;
+  color: #111827;
+}

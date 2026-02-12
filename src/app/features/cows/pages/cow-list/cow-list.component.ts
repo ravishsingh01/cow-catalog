@@ -146,7 +146,7 @@ export class CowListComponent implements OnInit, OnDestroy {
   }
 
   onAddCow(): void {
-    this.router.navigate(['/cows/create-cow'], {
+    this.router.navigate(['/cows/create'], {
       queryParams: {
         returnUrl: this.router.url
       }

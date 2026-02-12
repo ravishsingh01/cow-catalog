@@ -7,12 +7,14 @@ import { CowListComponent } from './pages/cow-list/cow-list.component';
 import { CreateCowComponent } from './pages/create-cow/create-cow.component';
 import { CowService } from './services/cow.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CowDetailComponent } from './pages/cow-detail/cow-detail.component';
 
 
 @NgModule({
   declarations: [
     CowListComponent,
     CreateCowComponent,
+    CowDetailComponent,
   ],
   imports: [
     CommonModule,
