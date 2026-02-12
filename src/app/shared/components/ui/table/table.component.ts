@@ -5,7 +5,14 @@ import {
   EventEmitter,
   ChangeDetectionStrategy
 } from '@angular/core';
-import { TableRowSelectEvent } from 'primeng/table';
+import { TablePageEvent } from 'primeng/table';
+
+interface PaginationEvent {
+  first?: number;
+  page?: number;
+  rows?: number;
+  pageCount?: number;
+}
 
 export interface TableColumn {
   field: string;
@@ -24,22 +31,37 @@ export class TableComponent<T = unknown> {
   @Input() value: T[] = [];
   @Input() columns: TableColumn[] = [];
   @Input() dataKey?: string;
-
+  @Input() rowClickable = false;
 
   @Input() loading = false;
   @Input() paginator = true;
   @Input() rows = 10;
-  @Input() rowsPerPageOptions: number[] = [5, 10, 20];
-
+  @Input() rowsPerPageOptions: number[] = [5, 10, 20, 50];
+  @Input() totalRecords = 0;
+  @Input() lazy = false;
   @Output() rowClick = new EventEmitter<T>();
 
-  onRowSelect(event: TableRowSelectEvent): void {
-    const row = event?.data as T | undefined;
+  @Output() pageChange = new EventEmitter<{
+    page: number;
+    rows: number;
+  }>();
 
-    if (!row) {
-      return; 
-    }
-
+  onRowClick(row: T): void {
+    if (!this.rowClickable) return;
     this.rowClick.emit(row);
+  }
+
+  onPageChange(event: TablePageEvent): void {
+    const paginationEvent = event as unknown as PaginationEvent;
+    const pageNumber = paginationEvent.page !== undefined 
+      ? paginationEvent.page 
+      : paginationEvent.first !== undefined 
+        ? Math.floor(paginationEvent.first / (paginationEvent.rows || this.rows))
+        : 0;
+        
+    this.pageChange.emit({
+      page: pageNumber,
+      rows: paginationEvent.rows ?? this.rows
+    });
   }
 }

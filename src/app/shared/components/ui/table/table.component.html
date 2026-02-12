@@ -1,14 +1,14 @@
 <p-table
   [value]="value"
-  [dataKey]="dataKey"
   [loading]="loading"
   [paginator]="paginator"
   [rows]="rows"
+  [totalRecords]="totalRecords"
   [rowsPerPageOptions]="rowsPerPageOptions"
-  selectionMode="single"
-  (onRowSelect)="onRowSelect($event)"
+  [lazy]="lazy"
+  responsiveLayout="scroll"
+  (onPage)="onPageChange($event)"
 >
-
   <ng-template pTemplate="header">
     <tr>
       <th *ngFor="let col of columns">
@@ -18,7 +18,10 @@
   </ng-template>
 
   <ng-template pTemplate="body" let-row>
-    <tr>
+    <tr
+      (click)="onRowClick(row)"
+      [class.row-clickable]="rowClickable"
+    >
       <td *ngFor="let col of columns">
         {{ row[col.field] }}
       </td>
@@ -35,5 +38,4 @@
       </td>
     </tr>
   </ng-template>
-
 </p-table>

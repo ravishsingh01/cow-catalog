@@ -1,0 +1,13 @@
+<h3>Cow List</h3>
+
+<app-table
+  [value]="(cows$ | async) ?? []"
+  [columns]="columns"
+  [rowClickable]="true"
+  [rows]="rows"
+  [totalRecords]="totalRecords"
+  [loading]="loading"
+  [lazy]="true"
+  (pageChange)="onPageChange($event)"
+  (rowClick)="rowClick($event)">
+</app-table>
