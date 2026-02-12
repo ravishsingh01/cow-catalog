@@ -1,0 +1,72 @@
+<div class="create-cow-page">
+  <app-page-header title="Create Cow"></app-page-header>
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+
+    <app-form-field label="Ear Tag" controlName="id">
+      <app-text-input
+        formControlName="id"
+        placeholder="Enter ear tag">
+      </app-text-input>
+    </app-form-field>
+
+    <app-form-field label="Sex" controlName="sex">
+      <app-dropdown
+        formControlName="sex"
+        [options]="[
+          { label: 'Male', value: 'MALE' },
+          { label: 'Female', value: 'FEMALE' }
+        ]"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="Select sex">
+      </app-dropdown>
+    </app-form-field>
+
+    <app-form-field label="Pen" controlName="pen">
+      <app-dropdown
+        formControlName="pen"
+        [options]="penOptions"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="Select pen">
+      </app-dropdown>
+    </app-form-field>
+
+    <app-form-field label="Status" controlName="status">
+      <app-dropdown
+        formControlName="status"
+        [options]="statusOptions"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="Select status">
+      </app-dropdown>
+    </app-form-field>
+
+    <app-form-field label="Weight (kg)" controlName="weight">
+      <app-number-input
+        formControlName="weight"
+        placeholder="Enter weight in kg"
+        [min]="WEIGHT_MIN"
+        [max]="WEIGHT_MAX"
+        [allowDecimal]="true"
+        [maxDecimalPlaces]="1">
+      </app-number-input>
+    </app-form-field>
+
+    <div class="actions">
+      <app-button
+        label="Cancel"
+        [text]="true"
+        (clicked)="cancel()">
+      </app-button>
+
+      <app-button
+        label="Save"
+        severity="primary"
+        type="submit">
+      </app-button>
+    </div>
+
+  </form>
+</div>

@@ -1,4 +1,13 @@
-:host {
-  display: block;
-  width: 100%;
+
+:host ::ng-deep {
+  p-inputnumber,
+  .p-inputnumber {
+    width: 100% !important;
+    display: flex !important; 
+  }
+
+  .p-inputnumber-input {
+    width: 100% !important;
+    flex: 1 1 auto; 
+  }
 }

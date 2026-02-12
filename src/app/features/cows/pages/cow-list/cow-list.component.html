@@ -22,6 +22,14 @@
     [ngModel]="penInput"
     (ngModelChange)="onPenChange($event)">
   </app-dropdown>
+  
+  <app-button
+  label="Add Cow"
+  icon="pi pi-plus"
+  severity="primary"
+  (clicked)="onAddCow()">
+</app-button>
+
 </app-page-header>
 
 <app-table

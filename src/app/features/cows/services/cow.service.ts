@@ -63,4 +63,14 @@ export class CowService {
   getCowById(id: string): Cow | undefined {
     return this.cows$.value.find(c => c.id === id);
   }
+
+  addCow(cow: Cow): void {
+    const exists = this.getCowById(cow.id);
+    if (exists) {
+      throw new Error('Cow with this ear tag already exists');
+    }
+    const updated = [cow, ...this.cows$.value];
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(updated));
+    this.cows$.next(updated);
+  }
 }

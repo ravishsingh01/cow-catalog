@@ -16,17 +16,9 @@ export function generateCowData(count = 30): Cow[] {
           ? 'IN_TREATMENT'
           : 'ACTIVE',
       weight: 400 + i * 4,
-      lastEventDate: randomDate()
+      lastEventDate: new Date().toISOString()
     });
   }
 
   return cows;
-}
-
-function randomDate(): string {
-  const start = new Date(2023, 0, 1).getTime();
-  const end = Date.now();
-  return new Date(start + Math.random() * (end - start))
-    .toISOString()
-    .split('T')[0];
 }

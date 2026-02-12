@@ -17,6 +17,13 @@ export class FormErrorComponent {
 
     const errors = this.control.errors;
 
+    for (const key of Object.keys(errors)) {
+      const error = errors[key];
+      if (error?.message) {
+        return error.message;
+      }
+    }
+
     if (errors['required']) {
       return 'This field is required';
     }
