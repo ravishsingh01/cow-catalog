@@ -1,0 +1,6 @@
+<i
+  class="pi"
+  [ngClass]="['pi-' + name, 'icon-' + size, clickable ? 'icon-clickable' : '']"
+  (click)="clickable && iconClick.emit()"
+>
+</i>

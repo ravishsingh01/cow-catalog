@@ -15,6 +15,7 @@ import { TableModule } from 'primeng/table';
 import { FormFieldComponent } from './components/form-field/form-field.component';
 import { FormErrorComponent } from './components/form-error/form-error.component';
 import { PageHeaderComponent } from './components/page-header/page-header.component';
+import { IconComponent } from './components/ui/icon/icon.component';
 @NgModule({
   declarations: [
     NotFoundComponent,
@@ -25,7 +26,8 @@ import { PageHeaderComponent } from './components/page-header/page-header.compon
     TableComponent,
     FormFieldComponent,
     FormErrorComponent,
-    PageHeaderComponent
+    PageHeaderComponent,
+    IconComponent,
   ],
   imports: [
     CommonModule,
@@ -35,18 +37,19 @@ import { PageHeaderComponent } from './components/page-header/page-header.compon
     InputNumberModule,
     DropdownModule,
     ButtonModule,
-    TableModule
+    TableModule,
   ],
   exports: [
-    NotFoundComponent, 
-    DropdownComponent, 
+    NotFoundComponent,
+    DropdownComponent,
     ButtonComponent,
     TextInputComponent,
     NumberInputComponent,
     TableComponent,
     FormFieldComponent,
     FormErrorComponent,
-    PageHeaderComponent
-  ]
+    PageHeaderComponent,
+    IconComponent,
+  ],
 })
-export class SharedModule { }
+export class SharedModule {}

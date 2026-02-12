@@ -8,6 +8,7 @@
 .page-header__left {
   display: flex;
   align-items: center;
+  gap: var(--spacing-sm, 8px);
 }
 
 .page-header__right {

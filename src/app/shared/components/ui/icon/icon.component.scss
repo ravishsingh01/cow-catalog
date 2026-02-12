@@ -1,0 +1,24 @@
+i {
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+}
+
+.icon-sm {
+  font-size: 0.875rem;
+}
+.icon-md {
+  font-size: 1rem;
+}
+.icon-lg {
+  font-size: 1.25rem;
+}
+
+.icon-clickable {
+  cursor: pointer;
+  color: var(--text-color-secondary);
+
+  &:hover {
+    color: var(--primary-color);
+  }
+}
