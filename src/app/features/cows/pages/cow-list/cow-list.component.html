@@ -1,10 +1,27 @@
 <app-page-header title="Cow List">
   <app-text-input
     placeholder="Search ear tag"
-    [value]="filters.search ?? ''"
+    [value]="searchInput ?? ''"
     (valueChange)="onSearch($event)">
   </app-text-input>
 
+  <app-dropdown
+    [options]="statusOptions"
+    optionLabel="label"
+    optionValue="value"
+    placeholder="Status"
+    [ngModel]="statusInput"
+    (ngModelChange)="onStatusChange($event)">
+  </app-dropdown>
+
+  <app-dropdown
+    [options]="penOptions"
+    optionLabel="label"
+    optionValue="value"
+    placeholder="Pen"
+    [ngModel]="penInput"
+    (ngModelChange)="onPenChange($event)">
+  </app-dropdown>
 </app-page-header>
 
 <app-table

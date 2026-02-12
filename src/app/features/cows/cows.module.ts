@@ -5,6 +5,7 @@ import { CowsRoutingModule } from './cows-routing.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { CowListComponent } from './pages/cow-list/cow-list.component';
 import { CowService } from './services/cow.service';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -14,6 +15,7 @@ import { CowService } from './services/cow.service';
   imports: [
     CommonModule,
     CowsRoutingModule,
+    FormsModule,
     SharedModule
   ],
   providers: [CowService]

@@ -1,10 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, Subject, catchError, debounceTime, distinctUntilChanged, finalize, map, of, switchMap, takeUntil, tap } from 'rxjs';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { Observable, Subject, catchError, debounceTime, distinctUntilChanged, map, of, switchMap, takeUntil, tap } from 'rxjs';
 import { Cow } from '../../models/cow.model';
 import { CowFilters } from '../../models/cow-filters.model';
 import { CowService } from '../../services/cow.service';
-
+import {
+  COW_STATUS_OPTIONS,
+  COW_PEN_OPTIONS
+} from 'src/app/core/constants/cow.constants';
 @Component({
   selector: 'app-cow-list',
   templateUrl: './cow-list.component.html',
@@ -15,17 +18,16 @@ export class CowListComponent implements OnInit, OnDestroy {
   cows$!: Observable<Cow[]>;
   private destroy$ = new Subject<void>();
 
-  filters: CowFilters = {
-    search: null,
-    status: null,
-    pen: null
-  };
+  searchInput: string | null = null;
+  statusInput: Cow['status'] | null = null;
+  penInput: string | null = null;
 
   page = 0;
   rows = 10;
   totalRecords = 0;
   loading = false;
-
+  statusOptions = COW_STATUS_OPTIONS;
+  penOptions = COW_PEN_OPTIONS;
   columns = [
     { field: 'id', header: 'Ear Tag' },
     { field: 'sex', header: 'Sex' },
@@ -43,33 +45,15 @@ export class CowListComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.cows$ = this.route.queryParamMap.pipe(
       debounceTime(150),
-
-      map(params => {
-        const page = +(params.get('page') ?? 0);
-        const rows = +(params.get('rows') ?? 10);
-
-        const filters: CowFilters = {
-          search: this.normalize(params.get('search')),
-          status: this.normalize(params.get('status')) as Cow['status'] | null,
-          pen: this.normalize(params.get('pen'))
-        };
-
-
-        this.page = page;
-        this.rows = rows;
-        this.filters = filters;
-
-        return { page, rows, filters };
+      map(params => this.deriveStateFromParams(params)),
+      distinctUntilChanged((a, b) => this.areStatesEqual(a, b)),
+      tap(state => {
+        this.searchInput = state.filters.search ?? null;
+        this.statusInput = state.filters.status ?? null;
+        this.penInput = state.filters.pen ?? null;
+        this.page = state.page;
+        this.rows = state.rows;
       }),
-
-      distinctUntilChanged((a, b) =>
-        a.page === b.page &&
-        a.rows === b.rows &&
-        a.filters.search === b.filters.search &&
-        a.filters.status === b.filters.status &&
-        a.filters.pen === b.filters.pen
-      ),
-
       switchMap(state => {
         this.loading = true;
 
@@ -90,25 +74,42 @@ export class CowListComponent implements OnInit, OnDestroy {
             catchError(() => of({ data: [], total: 0 }))
           );
       }),
-
       map(result => result.data),
-
       takeUntil(this.destroy$)
     );
   }
 
+  private deriveStateFromParams(params: ParamMap): { page: number; rows: number; filters: CowFilters } {
+    const page = +(params.get('page') ?? 0);
+    const rows = +(params.get('rows') ?? 10);
+    const filters: CowFilters = {
+      search: this.normalize(params.get('search')),
+      status: this.normalize(params.get('status')) as Cow['status'] | null,
+      pen: this.normalize(params.get('pen'))
+    };
+    return { page, rows, filters };
+  }
 
+  private areStatesEqual(a: any, b: any): boolean {
+    return (
+      a.page === b.page &&
+      a.rows === b.rows &&
+      a.filters.search === b.filters.search &&
+      a.filters.status === b.filters.status &&
+      a.filters.pen === b.filters.pen
+    );
+  }
 
   onSearch(value: string): void {
-  this.router.navigate([], {
-    relativeTo: this.route,
-    queryParams: {
-      search: value || null,
-      page: null
-    },
-    queryParamsHandling: 'merge'
-  });
-}
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        search: value || null,
+        page: null
+      },
+      queryParamsHandling: 'merge'
+    });
+  }
 
   onStatusChange(status: Cow['status'] | null): void {
     this.router.navigate([], {
@@ -121,7 +122,6 @@ export class CowListComponent implements OnInit, OnDestroy {
     });
   }
 
-
   onPenChange(pen: string | null): void {
     this.router.navigate([], {
       relativeTo: this.route,
@@ -132,7 +132,6 @@ export class CowListComponent implements OnInit, OnDestroy {
       queryParamsHandling: 'merge'
     });
   }
-
 
   onPageChange(event: { page: number; rows: number }): void {
     const isRowsChanged = event.rows !== this.rows;
