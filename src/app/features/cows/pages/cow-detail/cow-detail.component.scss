@@ -3,9 +3,10 @@
   flex-direction: column;
   gap: 16px;
   padding: 16px;
+  max-width: 960px;
+  margin: 0 auto;
 }
 
-/* Cards */
 .summary-card,
 .metrics-card,
 .timeline-card {
@@ -15,36 +16,34 @@
   padding: 16px;
 }
 
-/* Summary grid */
 .summary-card {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 16px;
 }
 
-.summary-item {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-/* Metrics */
-.metrics-card {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px;
-}
-
+.summary-item,
 .metric {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
-/* Labels & values */
+.metrics-card {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.metrics-card .value {
+  font-size: 15px;
+}
+
 .label {
   font-size: 12px;
-  color: #6b7280; /* muted gray */
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .value {
@@ -53,9 +52,32 @@
   color: #111827;
 }
 
-/* Timeline */
+.status-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 12px;
+  width: fit-content;
+}
+
+.status-badge.active {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-badge.treatment {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.status-badge.deceased {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
 .timeline-card h3 {
-  margin: 0 0 12px 0;
+  margin-bottom: 12px;
   font-size: 14px;
   font-weight: 600;
 }
@@ -69,10 +91,9 @@
 .timeline li {
   display: flex;
   gap: 12px;
-  padding: 8px 0;
-  border-left: 2px solid #e5e7eb;
-  padding-left: 12px;
+  padding: 8px 0 8px 16px;
   margin-left: 4px;
+  border-left: 2px solid #e5e7eb;
 }
 
 .timeline li:not(:last-child) {
@@ -80,12 +101,14 @@
 }
 
 .timeline .date {
-  font-size: 12px;
-  color: #6b7280;
   min-width: 90px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #6b7280;
 }
 
 .timeline .event {
   font-size: 14px;
+  line-height: 1.4;
   color: #111827;
 }

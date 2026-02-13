@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators, AbstractControl, ValidatorFn, FormG
 import { ActivatedRoute, Router } from '@angular/router';
 import { Cow, CowEvent, CowSex, CowStatus } from '../../models/cow.model';
 import { CowService } from '../../services/cow.service';
-import { COW_PEN_OPTIONS, COW_STATUS_OPTIONS ,COW_WEIGHT_MIN,COW_WEIGHT_MAX, COW_CREATE_STATUS_OPTIONS} from 'src/app/core/constants/cow.constants';
+import { COW_PEN_OPTIONS, COW_STATUS_OPTIONS ,COW_WEIGHT_MIN,COW_WEIGHT_MAX, COW_CREATE_STATUS_OPTIONS, COW_SEX_OPTIONS} from 'src/app/core/constants/cow.constants';
 import { Location } from '@angular/common';
 
 @Component({
@@ -19,6 +19,7 @@ export class CreateCowComponent {
   readonly penOptions = COW_PEN_OPTIONS;
   readonly WEIGHT_MIN = COW_WEIGHT_MIN;
   readonly WEIGHT_MAX = COW_WEIGHT_MAX;
+  readonly genderOptions = COW_SEX_OPTIONS;
   submitAction: 'SAVE' | 'SAVE_AND_ADD' = 'SAVE';
   readonly DEFAULT_COW_STATE = {
     id: '',
@@ -115,7 +116,7 @@ export class CreateCowComponent {
     const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/cows';
 
     if (this.submitAction === 'SAVE_AND_ADD') {
-       this.submitting = false;
+      this.submitting = false;
       this.resetFormForNextEntry();
       return;
     }

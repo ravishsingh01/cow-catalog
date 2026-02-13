@@ -1,8 +1,7 @@
-import { Cow } from "./cow.model";
+import { CowStatus, CowPen } from './cow.model';
 
 export interface CowFilters {
   search?: string | null;
-  status?: Cow['status'] | null;
-  pen?: string | null;
+  status?: CowStatus | null;
+  pen?: CowPen | null;
 }
-

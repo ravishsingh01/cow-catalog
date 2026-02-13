@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { Observable, Subject, distinctUntilChanged, map, of, shareReplay, switchMap, takeUntil, tap } from 'rxjs';
-import { Cow } from '../../models/cow.model';
+import { Observable, Subject, debounceTime, distinctUntilChanged, map, of, shareReplay, switchMap, takeUntil, tap } from 'rxjs';
+import { CowPen, CowStatus } from '../../models/cow.model';
 import { CowFilters } from '../../models/cow-filters.model';
 import { CowService } from '../../services/cow.service';
 import {
@@ -10,6 +10,7 @@ import {
 } from 'src/app/core/constants/cow.constants';
 import { humanize } from 'src/app/shared/utils/string-format.util';
 import { CowRowVM } from '../../models/cow-row.vm';
+import { formatDate } from '@angular/common';
 @Component({
   selector: 'app-cow-list',
   templateUrl: './cow-list.component.html',
@@ -23,7 +24,12 @@ export class CowListComponent implements OnInit, OnDestroy {
     distinctUntilChanged((a, b) => this.stateKey(a) === this.stateKey(b)),
     shareReplay({ bufferSize: 1, refCount: true }),
   );
-  search$ = this.state$.pipe(map((state) => state.filters.search ?? ''));
+
+  search$ = this.state$.pipe(
+    map((state) => state.filters.search ?? ''),
+    debounceTime(300),
+    distinctUntilChanged(),
+  );
 
   status$ = this.state$.pipe(map((state) => state.filters.status ?? null));
 
@@ -70,7 +76,9 @@ export class CowListComponent implements OnInit, OnDestroy {
             sex: humanize(cow.sex),
             pen: humanize(cow.pen),
             status: humanize(cow.status),
-            lastEventDate: cow.lastEventDate,
+            lastEventDate: cow.lastEventDate
+              ? formatDate(cow.lastEventDate, 'd MMM y', 'en-US')
+              : '—',
           }),
         ),
       ),
@@ -89,8 +97,8 @@ export class CowListComponent implements OnInit, OnDestroy {
       rows: +(params.get('rows') ?? 10),
       filters: {
         search: params.get('search'),
-        status: params.get('status') as Cow['status'] | null,
-        pen: params.get('pen'),
+        status: params.get('status') as CowStatus | null,
+        pen: params.get('pen') as CowPen | null,
       },
     };
   }
@@ -110,7 +118,7 @@ export class CowListComponent implements OnInit, OnDestroy {
     });
   }
 
-  onStatusChange(status: Cow['status'] | null): void {
+  onStatusChange(status: CowStatus | null): void {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
@@ -121,7 +129,7 @@ export class CowListComponent implements OnInit, OnDestroy {
     });
   }
 
-  onPenChange(pen: string | null): void {
+  onPenChange(pen: CowPen | null): void {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {

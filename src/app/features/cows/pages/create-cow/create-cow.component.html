@@ -13,10 +13,7 @@
     <app-form-field label="Gender" controlName="sex">
       <app-dropdown
         formControlName="sex"
-        [options]="[
-          { label: 'Male', value: 'MALE' },
-          { label: 'Female', value: 'FEMALE' }
-        ]"
+        [options]="genderOptions"
         optionLabel="label"
         optionValue="value"
         placeholder="Select gender">
@@ -43,7 +40,7 @@
       </app-dropdown>
     </app-form-field>
 
-    <app-form-field label="Weight (kg)" controlName="weight">
+    <app-form-field label="Weight (Optional)" controlName="weight">
       <app-number-input
         formControlName="weight"
         placeholder="Enter weight in kg"

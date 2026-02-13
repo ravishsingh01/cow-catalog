@@ -1,4 +1,4 @@
-import { Cow } from '../../features/cows/models/cow.model';
+import { Cow, CowPen } from '../../features/cows/models/cow.model';
 
 //Cow-related domain constants.
 export const COW_STATUS_OPTIONS: Array<{
@@ -19,14 +19,23 @@ export const COW_CREATE_STATUS_OPTIONS = [
 
 export const COW_PEN_OPTIONS: Array<{
   label: string;
-  value: string;
+  value: CowPen;
 }> = [
-  { label: 'Pen-1', value: 'PEN-1' },
-  { label: 'Pen-2', value: 'PEN-2' },
-  { label: 'Pen-3', value: 'PEN-3' },
-  { label: 'Pen-4', value: 'PEN-4' },
-  { label: 'Pen-5', value: 'PEN-5' }
+  { label: 'Calving', value: 'CALVING' },
+  { label: 'Milking', value: 'MILKING' },
+  { label: 'Heifer', value: 'HEIFER' },
+  { label: 'Sick', value: 'SICK' },
+  { label: 'Calf', value: 'CALF' },
 ];
+
+export const COW_SEX_OPTIONS: Array<{
+  label: string;
+  value: Cow['sex'];
+}> = [
+  { label: 'Male', value: 'MALE' },
+  { label: 'Female', value: 'FEMALE' },
+];
+
 
 export const COW_WEIGHT_MIN = 0.1;     // kg
 export const COW_WEIGHT_MAX = 1500;    // kg

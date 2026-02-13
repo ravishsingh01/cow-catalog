@@ -17,6 +17,8 @@ import { FormErrorComponent } from './components/form-error/form-error.component
 import { PageHeaderComponent } from './components/page-header/page-header.component';
 import { IconComponent } from './components/ui/icon/icon.component';
 import { HumanizePipe } from './pipes/humanize.pipe';
+import { SearchInputComponent } from './components/search-input/search-input.component';
+import { TooltipModule } from 'primeng/tooltip';
 @NgModule({
   declarations: [
     NotFoundComponent,
@@ -30,6 +32,7 @@ import { HumanizePipe } from './pipes/humanize.pipe';
     PageHeaderComponent,
     IconComponent,
     HumanizePipe,
+    SearchInputComponent,
   ],
   imports: [
     CommonModule,
@@ -40,6 +43,7 @@ import { HumanizePipe } from './pipes/humanize.pipe';
     DropdownModule,
     ButtonModule,
     TableModule,
+    TooltipModule,
   ],
   exports: [
     NotFoundComponent,
@@ -53,6 +57,7 @@ import { HumanizePipe } from './pipes/humanize.pipe';
     PageHeaderComponent,
     IconComponent,
     HumanizePipe,
+    SearchInputComponent,
   ],
 })
 export class SharedModule {}

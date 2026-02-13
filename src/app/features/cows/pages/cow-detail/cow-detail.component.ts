@@ -46,15 +46,18 @@ export class CowDetailComponent implements OnInit {
 
   get dailyWeightGain(): string {
     const weightEvents = this.cow.events
-      ?.filter((e) => e.type === 'WEIGHT' && (e as any).value !== undefined)
+      ?.filter(
+        (e): e is CowEvent & { value: number } =>
+          e.type === 'WEIGHT' && typeof e.value === 'number',
+      )
       .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
     if (!weightEvents || weightEvents.length < 2) {
-      return '—';
+      return 'Not enough data yet';
     }
 
-    const first = weightEvents[0] as any;
-    const last = weightEvents[weightEvents.length - 1] as any;
+    const first = weightEvents[0];
+    const last = weightEvents[weightEvents.length - 1];
 
     const days =
       (new Date(last.date).getTime() - new Date(first.date).getTime()) / (1000 * 60 * 60 * 24);

@@ -1,6 +1,6 @@
 import { daysAgo } from 'src/app/shared/utils/date.utils';
 import { Cow, CowEvent } from '../models/cow.model';
-
+const PEN_VALUES = ['CALVING', 'MILKING', 'HEIFER', 'SICK', 'CALF'] as const;
 // Pure function
 export function generateCowData(count = 30): Cow[] {
   const cows: Cow[] = [];
@@ -9,14 +9,12 @@ export function generateCowData(count = 30): Cow[] {
     const cow: Cow = {
       id: `COW-${1000 + i}`,
       sex: i % 2 === 0 ? 'MALE' : 'FEMALE',
-      pen: `PEN-${(i % 5) + 1}`,
+      pen: PEN_VALUES[i % PEN_VALUES.length],
       status: i % 7 === 0 ? 'DECEASED' : i % 4 === 0 ? 'IN_TREATMENT' : 'ACTIVE',
       weight: 400 + i * 4,
     };
 
     cow.events = buildEvents(cow);
-
-    // lastEventDate ALWAYS from latest event
     cow.lastEventDate = cow.events[cow.events.length - 1]?.date;
 
     cows.push(cow);

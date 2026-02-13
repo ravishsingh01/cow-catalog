@@ -24,7 +24,12 @@
 
     <div class="summary-item">
       <span class="label">Status</span>
-      <span class="value">{{ cow.status | humanize}}</span>
+      <span class="status-badge" [class.active]="cow.status === 'ACTIVE'"
+        [class.treatment]="cow.status === 'IN_TREATMENT'"
+        [class.deceased]="cow.status === 'DECEASED'">
+        {{ cow.status | humanize }}
+      </span>
+
     </div>
   </div>
 
@@ -50,7 +55,7 @@
     <ul class="timeline" *ngIf="cow.events?.length; else noEvents">
       <li *ngFor="let event of cow.events; trackBy: trackByEvent">
         <span class="date">
-          {{ event.date | date: 'yyyy-MM-dd' }}
+          {{ event.date | date:'d MMM y' }}
         </span>
 
         <span class="event">
@@ -61,7 +66,7 @@
             </span>
 
             <span *ngSwitchCase="'WEIGHT'">
-              Weight check: {{ event.value }} kg
+              Weight recorded: {{ event.value }} kg
             </span>
 
             <span *ngSwitchCase="'TREATMENT'">
