@@ -1,11 +1,14 @@
 .layout-container {
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .content {
-  flex:1;
-  padding:0 var(--spacing-md);
-  background-color: var(--surface-ground)
+  flex: 1;
+  padding: 0 var(--spacing-md);
+  background-color: var(--surface-ground);
+  position: relative;
+  overflow-y: auto;
 }

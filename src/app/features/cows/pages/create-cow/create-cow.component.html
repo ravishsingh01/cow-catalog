@@ -36,7 +36,7 @@
     <app-form-field label="Status" controlName="status">
       <app-dropdown
         formControlName="status"
-        [options]="statusOptions"
+        [options]="createCowStatusOptions"
         optionLabel="label"
         optionValue="value"
         placeholder="Select status">
@@ -69,6 +69,7 @@
         label="Save & Add Another"
         severity="secondary"
         type="submit"
+        [disabled]="form.invalid || submitting"
         (clicked)="submitAction = 'SAVE_AND_ADD'">
       </app-button>
 
@@ -76,6 +77,7 @@
         label="Save"
         severity="primary"
         type="submit"
+        [disabled]="form.invalid || submitting"
         (clicked)="submitAction = 'SAVE'">
       </app-button>
     </div>

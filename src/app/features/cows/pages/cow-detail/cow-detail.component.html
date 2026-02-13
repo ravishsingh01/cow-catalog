@@ -14,17 +14,17 @@
 
     <div class="summary-item">
       <span class="label">Gender</span>
-      <span class="value">{{ cow.sex }}</span>
+      <span class="value">{{ cow.sex | humanize}}</span>
     </div>
 
     <div class="summary-item">
       <span class="label">Pen</span>
-      <span class="value">{{ cow.pen }}</span>
+      <span class="value">{{ cow.pen | humanize}}</span>
     </div>
 
     <div class="summary-item">
       <span class="label">Status</span>
-      <span class="value">{{ cow.status }}</span>
+      <span class="value">{{ cow.status | humanize}}</span>
     </div>
   </div>
 
@@ -45,23 +45,42 @@
 
   <!-- Timeline -->
   <div class="timeline-card">
-  <h3>Recent Events</h3>
+    <h3>Recent Events</h3>
 
-  <ul class="timeline" *ngIf="cow.events?.length; else noEvents">
-    <li *ngFor="let event of cow.events; trackBy: trackByEvent">
-      <span class="date">
-        {{ event.date | date: 'yyyy-mm-dd' }}
-      </span>
-      <span class="event">
-        {{ event.note }}
-      </span>
-    </li>
-  </ul>
+    <ul class="timeline" *ngIf="cow.events?.length; else noEvents">
+      <li *ngFor="let event of cow.events; trackBy: trackByEvent">
+        <span class="date">
+          {{ event.date | date: 'yyyy-MM-dd' }}
+        </span>
 
-  <ng-template #noEvents>
-    <p>No events recorded.</p>
-  </ng-template>
-</div>
+        <span class="event">
+          <ng-container [ngSwitch]="event.type">
+
+            <span *ngSwitchCase="'REGISTERED'">
+              Cow registered
+            </span>
+
+            <span *ngSwitchCase="'WEIGHT'">
+              Weight check: {{ event.value }} kg
+            </span>
+
+            <span *ngSwitchCase="'TREATMENT'">
+              Treatment applied
+            </span>
+
+            <span *ngSwitchCase="'DECEASED'">
+              Cow marked as deceased
+            </span>
+
+          </ng-container>
+        </span>
+      </li>
+    </ul>
+
+    <ng-template #noEvents>
+      <p>No events recorded.</p>
+    </ng-template>
+  </div>
 
 
 </div>

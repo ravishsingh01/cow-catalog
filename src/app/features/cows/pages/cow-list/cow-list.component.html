@@ -1,46 +1,49 @@
-<app-page-header title="Cow List">
-  <app-text-input
-    placeholder="Search ear tag"
-    [value]="searchInput ?? ''"
-    (valueChange)="onSearch($event)">
-  </app-text-input>
+<div class="cow-list-page">
+  <app-page-header title="Cow List">
+    <app-text-input
+      placeholder="Search ear tag"
+      [value]="search$ | async"
+      (valueChange)="onSearch($event)">
+    </app-text-input>
 
-  <app-dropdown
-    [options]="statusOptions"
-    optionLabel="label"
-    optionValue="value"
-    placeholder="Status"
-    [ngModel]="statusInput"
-    (ngModelChange)="onStatusChange($event)">
-  </app-dropdown>
+    <app-dropdown
+      [options]="statusOptions"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Status"
+      [ngModel]="status$ | async"
+      (ngModelChange)="onStatusChange($event)">
+    </app-dropdown>
 
-  <app-dropdown
-    [options]="penOptions"
-    optionLabel="label"
-    optionValue="value"
-    placeholder="Pen"
-    [ngModel]="penInput"
-    (ngModelChange)="onPenChange($event)">
-  </app-dropdown>
-  
-  <app-button
-  label="Add Cow"
-  icon="pi pi-plus"
-  severity="primary"
-  (clicked)="onAddCow()">
-</app-button>
+    <app-dropdown
+      [options]="penOptions"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Pen"
+      [ngModel]="pen$ | async"
+      (ngModelChange)="onPenChange($event)">
+    </app-dropdown>
+    
+    <app-button
+      label="Add Cow"
+      icon="pi pi-plus"
+      severity="primary"
+      (clicked)="onAddCow()">
+    </app-button>
+  </app-page-header>
 
-</app-page-header>
-
-<app-table
-  [value]="(cows$ | async) ?? []"
-  [columns]="columns"
-  [rowClickable]="true"
-  [rows]="rows"
-  [first]="page * rows" 
-  [totalRecords]="totalRecords"
-  [loading]="loading"
-  [lazy]="true"
-  (pageChange)="onPageChange($event)"
-  (rowClick)="rowClick($event)">
-</app-table>
+  <div class="table-container">
+    <app-table
+      [value]="(cows$ | async) ?? []"
+      [columns]="columns"
+      [rowClickable]="true"
+      [rows]="rows"
+      [first]="page * rows" 
+      [totalRecords]="totalRecords"
+      [loading]="loading"
+      [lazy]="true"
+      (pageChange)="onPageChange($event)"
+      (rowClick)="rowClick($event)">
+    </app-table>
+  </div>
+</div>

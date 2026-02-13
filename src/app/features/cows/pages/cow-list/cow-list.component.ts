@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { Observable, Subject, catchError, debounceTime, distinctUntilChanged, map, of, switchMap, takeUntil, tap } from 'rxjs';
+import { Observable, Subject, distinctUntilChanged, map, of, shareReplay, switchMap, takeUntil, tap } from 'rxjs';
 import { Cow } from '../../models/cow.model';
 import { CowFilters } from '../../models/cow-filters.model';
 import { CowService } from '../../services/cow.service';
@@ -8,19 +8,26 @@ import {
   COW_STATUS_OPTIONS,
   COW_PEN_OPTIONS
 } from 'src/app/core/constants/cow.constants';
+import { humanize } from 'src/app/shared/utils/string-format.util';
+import { CowRowVM } from '../../models/cow-row.vm';
 @Component({
   selector: 'app-cow-list',
   templateUrl: './cow-list.component.html',
   styleUrls: ['./cow-list.component.scss'],
 })
 export class CowListComponent implements OnInit, OnDestroy {
-  cows$!: Observable<Cow[]>;
+  cows$!: Observable<CowRowVM[]>;
   private destroy$ = new Subject<void>();
+  state$ = this.route.queryParamMap.pipe(
+    map((params) => this.deriveStateFromParams(params)),
+    distinctUntilChanged((a, b) => this.stateKey(a) === this.stateKey(b)),
+    shareReplay({ bufferSize: 1, refCount: true }),
+  );
+  search$ = this.state$.pipe(map((state) => state.filters.search ?? ''));
 
-  searchInput: string | null = null;
-  statusInput: Cow['status'] | null = null;
-  penInput: string | null = null;
+  status$ = this.state$.pipe(map((state) => state.filters.status ?? null));
 
+  pen$ = this.state$.pipe(map((state) => state.filters.pen ?? null));
   page = 0;
   rows = 10;
   totalRecords = 0;
@@ -42,36 +49,32 @@ export class CowListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.cows$ = this.route.queryParamMap.pipe(
-      debounceTime(150),
-      map((params) => this.deriveStateFromParams(params)),
-      distinctUntilChanged((a, b) => this.areStatesEqual(a, b)),
+    this.cows$ = this.state$.pipe(
       tap((state) => {
-        this.searchInput = state.filters.search ?? null;
-        this.statusInput = state.filters.status ?? null;
-        this.penInput = state.filters.pen ?? null;
+        this.loading = true;
         this.page = state.page;
         this.rows = state.rows;
       }),
-      switchMap((state) => {
-        this.loading = true;
 
-        return this.cowService.getPagedCows(state.page, state.rows, state.filters).pipe(
-          tap({
-            next: (result) => {
-              this.totalRecords = result.total;
-              this.loading = false;
-            },
-            error: (err) => {
-              console.error('Failed to load cows', err);
-              this.totalRecords = 0;
-              this.loading = false;
-            },
-          }),
-          catchError(() => of({ data: [], total: 0 })),
-        );
+      switchMap((state) => this.cowService.getPagedCows(state.page, state.rows, state.filters)),
+
+      tap((result) => {
+        this.totalRecords = result.total;
+        this.loading = false;
       }),
-      map((result) => result.data),
+
+      map((result) =>
+        result.data.map(
+          (cow): CowRowVM => ({
+            id: cow.id,
+            sex: humanize(cow.sex),
+            pen: humanize(cow.pen),
+            status: humanize(cow.status),
+            lastEventDate: cow.lastEventDate,
+          }),
+        ),
+      ),
+
       takeUntil(this.destroy$),
     );
   }
@@ -81,24 +84,19 @@ export class CowListComponent implements OnInit, OnDestroy {
     rows: number;
     filters: CowFilters;
   } {
-    const page = +(params.get('page') ?? 0);
-    const rows = +(params.get('rows') ?? 10);
-    const filters: CowFilters = {
-      search: this.normalize(params.get('search')),
-      status: this.normalize(params.get('status')) as Cow['status'] | null,
-      pen: this.normalize(params.get('pen')),
+    return {
+      page: +(params.get('page') ?? 0),
+      rows: +(params.get('rows') ?? 10),
+      filters: {
+        search: params.get('search'),
+        status: params.get('status') as Cow['status'] | null,
+        pen: params.get('pen'),
+      },
     };
-    return { page, rows, filters };
   }
 
-  private areStatesEqual(a: any, b: any): boolean {
-    return (
-      a.page === b.page &&
-      a.rows === b.rows &&
-      a.filters.search === b.filters.search &&
-      a.filters.status === b.filters.status &&
-      a.filters.pen === b.filters.pen
-    );
+  private stateKey(state: { page: number; rows: number; filters: CowFilters }): string {
+    return JSON.stringify(state);
   }
 
   onSearch(value: string): void {
@@ -154,12 +152,8 @@ export class CowListComponent implements OnInit, OnDestroy {
     });
   }
 
-  rowClick(cow: Cow): void {
+  rowClick(cow: CowRowVM): void {
     this.router.navigate(['/cows', cow.id]);
-  }
-
-  private normalize(value: string | null): string | null {
-    return value && value.trim().length ? value : null;
   }
 
   ngOnDestroy(): void {

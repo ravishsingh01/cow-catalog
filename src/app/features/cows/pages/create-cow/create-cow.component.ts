@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators, AbstractControl, ValidatorFn, FormG
 import { ActivatedRoute, Router } from '@angular/router';
 import { Cow, CowEvent, CowSex, CowStatus } from '../../models/cow.model';
 import { CowService } from '../../services/cow.service';
-import { COW_PEN_OPTIONS, COW_STATUS_OPTIONS ,COW_WEIGHT_MIN,COW_WEIGHT_MAX} from 'src/app/core/constants/cow.constants';
+import { COW_PEN_OPTIONS, COW_STATUS_OPTIONS ,COW_WEIGHT_MIN,COW_WEIGHT_MAX, COW_CREATE_STATUS_OPTIONS} from 'src/app/core/constants/cow.constants';
 import { Location } from '@angular/common';
 
 @Component({
@@ -15,7 +15,7 @@ export class CreateCowComponent {
   @ViewChild(FormGroupDirective)
   private formDirective!: FormGroupDirective;
   form: FormGroup;
-  readonly statusOptions = COW_STATUS_OPTIONS;
+  readonly createCowStatusOptions = COW_CREATE_STATUS_OPTIONS;
   readonly penOptions = COW_PEN_OPTIONS;
   readonly WEIGHT_MIN = COW_WEIGHT_MIN;
   readonly WEIGHT_MAX = COW_WEIGHT_MAX;
@@ -27,6 +27,7 @@ export class CreateCowComponent {
     status: 'ACTIVE' as CowStatus,
     weight: null,
   };
+  submitting = false;
   constructor(
     private fb: FormBuilder,
     private cowService: CowService,
@@ -65,11 +66,11 @@ export class CreateCowComponent {
   }
 
   submit(): void {
-    if (this.form.invalid) {
+    if (this.form.invalid || this.submitting) {
       this.form.markAllAsTouched();
       return;
     }
-
+    this.submitting = true;
     const raw = this.form.getRawValue();
     const now = new Date().toISOString();
 
@@ -85,17 +86,19 @@ export class CreateCowComponent {
       events.push({
         type: 'WEIGHT',
         date: now,
+        value: Number(raw.weight),
         note: `Weight recorded (${Number(raw.weight)} kg)`,
       });
     }
 
-    if (raw.status !== 'ACTIVE') {
+    if (raw.status === 'IN_TREATMENT') {
       events.push({
-        type: 'STATUS_CHANGE',
+        type: 'TREATMENT',
         date: now,
-        note: `Status changed to ${raw.status}`,
+        note: 'Cow put under treatment',
       });
     }
+    // DECEASED status cannot be set at creation, so no need to handle that case here.
 
     const cow: Cow = {
       id: raw.id.toString().trim(),
@@ -112,6 +115,7 @@ export class CreateCowComponent {
     const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/cows';
 
     if (this.submitAction === 'SAVE_AND_ADD') {
+       this.submitting = false;
       this.resetFormForNextEntry();
       return;
     }

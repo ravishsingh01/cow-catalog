@@ -16,6 +16,7 @@ import { FormFieldComponent } from './components/form-field/form-field.component
 import { FormErrorComponent } from './components/form-error/form-error.component';
 import { PageHeaderComponent } from './components/page-header/page-header.component';
 import { IconComponent } from './components/ui/icon/icon.component';
+import { HumanizePipe } from './pipes/humanize.pipe';
 @NgModule({
   declarations: [
     NotFoundComponent,
@@ -28,6 +29,7 @@ import { IconComponent } from './components/ui/icon/icon.component';
     FormErrorComponent,
     PageHeaderComponent,
     IconComponent,
+    HumanizePipe,
   ],
   imports: [
     CommonModule,
@@ -50,6 +52,7 @@ import { IconComponent } from './components/ui/icon/icon.component';
     FormErrorComponent,
     PageHeaderComponent,
     IconComponent,
+    HumanizePipe,
   ],
 })
 export class SharedModule {}
