@@ -13,6 +13,11 @@ domain behavior.
 Cow Catalog is a frontend-only Angular application that allows users to browse and manage
 a simple catalog of cattle records.
 
+## Live Demo
+
+🔗 https://ravishsingh01.github.io/cow-catalog/
+
+
 ### Core Features
 - Cow list with pagination
 - Search and filtering with URL-based state
@@ -152,14 +157,6 @@ feature completeness.
 - Unit tests for filtering, pagination, and creation logic
 - Backend integration with server-side paging
 - Edit cow flow and event creation UI
-
----
-
-## Optional Deployment
-This is a standard Angular application and can be deployed to static hosting providers
-such as Netlify, Vercel, GitHub Pages, or Azure Static Web Apps.
-
----
 
 ## Key Files
 - `cow.model.ts` — domain models
